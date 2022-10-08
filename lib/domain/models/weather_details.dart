@@ -22,9 +22,10 @@ class WeatherDetails {
     required this.windSpeed,
   });
 
-  // Единственный метод конвертации из мапы, так как больше никаких действий
-  // с объектом не осуществляем после получения данных
-  factory WeatherDetails.fromJson(Map<String, dynamic> map) {
+  // Единственный метод конвертации - из мапы, так как больше никаких действий
+  // с объектом не осуществляем после получения данных,
+  // DIO преобразовывает их из json в map автоматически
+  factory WeatherDetails.fromMap(Map<String, dynamic> map) {
     return WeatherDetails(
       cityName: map['name'] as String? ?? '',
       timeStamp: DateTime.fromMillisecondsSinceEpoch(map['dt'] as int? ?? 0),
@@ -39,14 +40,9 @@ class WeatherDetails {
     );
   }
 
+  // Для проверки получаемого объекта
   @override
   String toString() {
-    return '''WeatherDetails(cityName: $cityName,
-                             timeStamp: $timeStamp,
-                             weatherDescription: $weatherDescription, 
-                             iconUrl: $iconUrl, temp: $temp, 
-                             feelsLike: $feelsLike, 
-                             humidity: $humidity, 
-                             windSpeed: $windSpeed)''';
+    return 'Weather(city: $cityName, ts: $timeStamp, desc: $weatherDescription, icon: $iconUrl, t: $temp, feels: $feelsLike, humid: $humidity, wind: $windSpeed)';
   }
 }

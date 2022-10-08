@@ -18,7 +18,7 @@ class WeatherApi {
     );
 
     if (response.statusCode == 200) {
-      return WeatherDetails.fromJson(response.data);
+      return WeatherDetails.fromMap(response.data);
     } else {
       throw Exception('Не удалось получить данные о погоде');
     }
@@ -40,7 +40,7 @@ class WeatherApi {
       final List<dynamic> responseData = response.data['list'];
       List<WeatherDetails> forecastList = [];
       for (int i = 7; i <= 23; i + 7) {
-        forecastList.add(WeatherDetails.fromJson(responseData[i]));
+        forecastList.add(WeatherDetails.fromMap(responseData[i]));
       }
       return forecastList;
     } else {

@@ -12,8 +12,8 @@ class ApiService {
       responseType: ResponseType.json,
       queryParameters: {
         'appid': Config.apiKey,
-        'units': 'metric',
-        'lang': 'ru',
+        'units': Config.unitsSystem,
+        'lang': Config.responseLang,
       },
     );
     return Dio(options);
