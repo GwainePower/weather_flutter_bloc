@@ -18,7 +18,10 @@ class WeatherApi {
     );
 
     if (response.statusCode == 200) {
+      // print(response.data);
       return WeatherDetails.fromMap(response.data);
+    } else if (response.statusCode == 404) {
+      throw Exception('Город с таким именем не найден');
     } else {
       throw Exception('Не удалось получить данные о погоде');
     }
@@ -35,13 +38,13 @@ class WeatherApi {
     );
 
     // Идёт расчёт на то, что в запросе будет массив из 24 записей
-    // (шаг через каждую трёхчасовую запись из API ответа, получаем 3 дня)
+    // 24 записи по 3х-часовому прогнозу == прогноз на 3 дня
     if (response.statusCode == 200) {
-      final List<dynamic> responseData = response.data['list'];
-      List<WeatherDetails> forecastList = [];
-      for (int i = 7; i <= 23; i + 7) {
-        forecastList.add(WeatherDetails.fromMap(responseData[i]));
-      }
+      final List<WeatherDetails> forecastList = (response.data['list'] as List)
+          .map((weatherObj) => WeatherDetails.fromMap(weatherObj))
+          .toList();
+      forecastList.sort((a, b) =>
+          a.temp.compareTo(b.temp)); // Сортируем по температуре, п. 3 задания
       return forecastList;
     } else {
       throw Exception('Не удалось получить данные о прогнозе погоды');
