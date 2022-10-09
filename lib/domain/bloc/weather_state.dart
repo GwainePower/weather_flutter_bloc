@@ -5,30 +5,28 @@ class WeatherState {
   final WeatherDetails? weatherDetails;
   final List<WeatherDetails> forecastData;
   final bool isLoading;
-  final String errorMessage;
+  final String errorCode;
 
   const WeatherState({
     this.weatherDetails,
     this.forecastData = const [],
     this.isLoading = false,
-    this.errorMessage = '',
+    this.errorCode = '',
   });
 
   WeatherState copyWith({
     WeatherDetails? weatherDetails,
     List<WeatherDetails>? forecastData,
     bool isLoading = false,
-    String errorMessage = '',
+    String errorCode = '',
   }) {
     return WeatherState(
       weatherDetails: weatherDetails ?? this.weatherDetails,
       forecastData: forecastData ?? this.forecastData,
       isLoading: isLoading,
-      errorMessage: errorMessage,
+      errorCode: errorCode,
     );
   }
 
-  WeatherState clearData() {
-    return const WeatherState();
-  }
+  WeatherState clearData() => const WeatherState();
 }

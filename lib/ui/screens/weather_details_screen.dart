@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../utils/extensions.dart';
+
 import '../../domain/bloc/weather_bloc.dart';
 
 import '../navigation/main_navigation.dart';
+
+import '../widgets/weather_details_screen/min_max_temp_widget.dart';
+import '../widgets/weather_details_screen/wind_data.dart';
 
 class WeatherDetailsScreen extends StatelessWidget {
   const WeatherDetailsScreen({Key? key}) : super(key: key);
@@ -11,26 +16,78 @@ class WeatherDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weatherBloc = BlocProvider.of<WeatherBloc>(context);
-    return BlocBuilder<WeatherBloc, WeatherState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('${state.weatherDetails!.cityName} в деталях'),
-            leading: IconButton(
-                onPressed: () => Navigator.of(context)
-                    .pushReplacementNamed(RouteNames.search),
-                icon: const Icon(Icons.arrow_back)),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    weatherBloc.add(GetWeatherForecastEvent());
-                  },
-                  icon: const Icon(Icons.cloudy_snowing))
-            ],
-          ),
-          body: const Text('Hello'),
-        );
-      },
+    final navigator = Navigator.of(context);
+    final deviceSize = MediaQuery.of(context).size;
+    final themeData = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () => navigator.pushReplacementNamed(RouteNames.search),
+            icon: const Icon(Icons.arrow_back)),
+        actions: [
+          IconButton(
+              onPressed: () {
+                navigator.pushNamed(RouteNames.weatherForecast);
+                weatherBloc.add(GetWeatherForecastEvent());
+              },
+              icon: const Icon(Icons.thermostat)),
+        ],
+      ),
+      body: BlocBuilder<WeatherBloc, WeatherState>(
+        builder: (context, state) {
+          final weatherData = state.weatherDetails!;
+          return Container(
+            width: deviceSize.width,
+            padding: const EdgeInsets.symmetric(
+              vertical: 40,
+              horizontal: 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    weatherData.cityName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 36,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    weatherData.weatherDescription,
+                    style: const TextStyle(fontSize: 28),
+                  ),
+                ),
+                Image.network(weatherData.iconUrl),
+                Text(
+                  weatherData.temp.degreefy(),
+                  style: const TextStyle(fontSize: 64),
+                ),
+                MinMaxTempWidget(weatherData: weatherData),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Ощущается как: '),
+                    Text(weatherData.feelsLike.degreefy())
+                  ],
+                ),
+                WindDataWidget(windSpeed: weatherData.windSpeed),
+                SizedBox(
+                  height: deviceSize.height * 0.15,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

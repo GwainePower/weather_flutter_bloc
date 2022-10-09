@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 import '../models/weather_details.dart';
@@ -24,18 +25,24 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     try {
       final weatherDetails = await _api.getWeatherDetails(_query);
       emit(state.copyWith(weatherDetails: weatherDetails));
-    } catch (e) {
-      print(e.toString());
-      emit(state.copyWith(errorMessage: e.toString()));
+    } on DioError catch (e) {
+      emit(state.copyWith(
+          errorCode:
+              e.response == null ? '-1' : e.response!.statusCode.toString()));
     }
-    // print(state.weatherDetails.toString());
   }
 
   Future<void> _getWeatherForecastEvent(
       GetWeatherForecastEvent event, Emitter<WeatherState> emit) async {
+    if (state.forecastData.isNotEmpty) return;
     emit(state.copyWith(isLoading: true));
-    final weatherForecast = await _api.getWeatherForecast(_query);
-    emit(state.copyWith(forecastData: weatherForecast));
-    // print(state.forecastData.toString());
+    try {
+      final weatherForecast = await _api.getWeatherForecast(_query);
+      emit(state.copyWith(forecastData: weatherForecast));
+    } on DioError catch (e) {
+      emit(state.copyWith(
+          errorCode:
+              e.response == null ? '-1' : e.response!.statusCode.toString()));
+    }
   }
 }

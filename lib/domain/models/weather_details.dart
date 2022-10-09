@@ -7,6 +7,8 @@ class WeatherDetails {
   final String weatherDescription;
   final String iconUrl;
   final num temp;
+  final num tempMin;
+  final num tempMax;
   final num feelsLike;
   final int humidity;
   final num windSpeed;
@@ -17,6 +19,8 @@ class WeatherDetails {
     required this.weatherDescription,
     required this.iconUrl,
     required this.temp,
+    required this.tempMin,
+    required this.tempMax,
     required this.feelsLike,
     required this.humidity,
     required this.windSpeed,
@@ -36,6 +40,8 @@ class WeatherDetails {
       iconUrl:
           'http://openweathermap.org/img/wn/${map['weather'][0]['icon']}@2x.png',
       temp: map['main']['temp'] as num,
+      tempMin: map['main']['temp_min'] as num,
+      tempMax: map['main']['temp_max'] as num,
       feelsLike: map['main']['feels_like'] as num,
       humidity: map['main']['humidity'] as int,
       windSpeed: map['wind']['speed'] as num,

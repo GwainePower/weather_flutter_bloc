@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SearchError extends StatelessWidget {
-  final String text;
+  final String errorCode;
   const SearchError({
     Key? key,
-    required this.text,
+    required this.errorCode,
   }) : super(key: key);
 
   @override
@@ -16,10 +16,14 @@ class SearchError extends StatelessWidget {
         const CircleAvatar(
           radius: 50,
           backgroundColor: Color.fromARGB(255, 245, 139, 139),
-          child: Icon(Icons.warning_rounded, size: 50),
+          child: Icon(
+            Icons.warning_rounded,
+            size: 50,
+            color: Colors.white,
+          ),
         ),
         Text(
-          text,
+          'Ошибка получения данных. Код $errorCode',
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Color.fromARGB(255, 255, 39, 24),

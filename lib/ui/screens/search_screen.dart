@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_flutter_bloc/domain/bloc/weather_bloc.dart';
-import 'package:weather_flutter_bloc/ui/navigation/main_navigation.dart';
-import 'package:weather_flutter_bloc/ui/widgets/search_error_widget.dart';
+
+import '../../domain/bloc/weather_bloc.dart';
+
+import '../navigation/main_navigation.dart';
+
+import '../widgets/search_error_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -79,8 +82,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (state.errorMessage.isNotEmpty) {
-                    return SearchError(text: state.errorMessage);
+                  if (state.errorCode.isNotEmpty) {
+                    return SearchError(errorCode: state.errorCode);
                   } else {
                     return Container();
                   }
