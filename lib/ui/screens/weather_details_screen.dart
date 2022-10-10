@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_flutter_bloc/ui/widgets/weather_details_screen/humidity_widget.dart';
 
 import '../../utils/extensions.dart';
 
@@ -74,6 +75,7 @@ class WeatherDetailsScreen extends StatelessWidget {
                 ),
                 MinMaxTempWidget(weatherData: weatherData),
                 FeelsLikeTempWidget(temp: weatherData.feelsLike),
+                HumidityDataWidget(humidity: weatherData.humidity),
                 WindDataWidget(windSpeed: weatherData.windSpeed),
                 SizedBox(
                   height: deviceSize.height * 0.15,

@@ -10,6 +10,7 @@ import '../widgets/search_error_widget.dart';
 
 // Экран поиска деталей о погоде по указанному городу.
 // Результаты и ошибки обрабатываются через WeatherBloc
+// При ошибке выводится SnackBar с соответствующим сообщением
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -18,8 +19,33 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  // Переменные экрана
   String _query = '';
   final _searchTextFieldController = TextEditingController();
+
+  // Функция, показывающая SnackBar с ошибкой
+  void _showErrorSnackBar(String errorCode, double position) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 1500),
+        margin: EdgeInsets.only(
+          bottom: position,
+          left: 20,
+          right: 20,
+        ),
+        shape: const StadiumBorder(),
+        content: Text(
+          errorCode == '404'
+              ? 'Такого города не существует!'
+              : errorCode == '-1'
+                  ? 'Не удалось получить ответ с сервера'
+                  : 'Неизвестная ошибка',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -33,15 +59,15 @@ class _SearchScreenState extends State<SearchScreen> {
     final themeBloc = BlocProvider.of<ThemeBloc>(context);
     final deviceSize = MediaQuery.of(context).size;
     final themeData = Theme.of(context);
-    bool isDarkTheme = themeBloc.isLightThemeStored;
+    bool isLightTheme = themeBloc.isLightThemeStored;
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             icon: const Icon(Icons.nightlight_rounded),
             onPressed: () {
-              themeBloc.add(ChangeThemeEvent(isDarkTheme));
-              setState((() => isDarkTheme = !isDarkTheme));
+              themeBloc.add(ChangeThemeEvent(isLightTheme));
+              setState((() => isLightTheme = !isLightTheme));
             },
           )
         ],
@@ -89,6 +115,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (state.weatherDetails != null) {
                     Navigator.of(context)
                         .pushReplacementNamed(RouteNames.weatherDetails);
+                  }
+                  if (state.errorCode.isNotEmpty) {
+                    _showErrorSnackBar(
+                      state.errorCode,
+                      deviceSize.height * 0.5,
+                    );
                   }
                 },
                 builder: (context, state) {

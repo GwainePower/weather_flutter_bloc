@@ -11,7 +11,7 @@ class FeelsLikeTempWidget extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text('Ощущается как: '),
+        const Text('Ощущается как '),
         Text(temp.degreefy()),
       ],
     );

@@ -6,18 +6,15 @@ class WindDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(right: 4),
-            child: Icon(Icons.air_rounded),
-          ),
-          Text('${windSpeed.toString()} м/сек'),
-        ],
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(right: 4),
+          child: Icon(Icons.air_rounded),
+        ),
+        Text('${windSpeed.toString()} м/сек'),
+      ],
     );
   }
 }
