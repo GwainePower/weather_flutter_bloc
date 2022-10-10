@@ -15,7 +15,7 @@ class SearchError extends StatelessWidget {
       children: [
         const CircleAvatar(
           radius: 50,
-          backgroundColor: Color.fromARGB(255, 245, 139, 139),
+          backgroundColor: Color.fromARGB(255, 100, 56, 56),
           child: Icon(
             Icons.warning_rounded,
             size: 50,

@@ -8,8 +8,10 @@ import '../../domain/bloc/weather_bloc.dart';
 import '../navigation/main_navigation.dart';
 
 import '../widgets/weather_details_screen/min_max_temp_widget.dart';
+import '../widgets/weather_details_screen/feels_like_temp_widget.dart';
 import '../widgets/weather_details_screen/wind_data.dart';
 
+// Экран деталей погоды по указанному городу
 class WeatherDetailsScreen extends StatelessWidget {
   const WeatherDetailsScreen({Key? key}) : super(key: key);
 
@@ -18,7 +20,6 @@ class WeatherDetailsScreen extends StatelessWidget {
     final weatherBloc = BlocProvider.of<WeatherBloc>(context);
     final navigator = Navigator.of(context);
     final deviceSize = MediaQuery.of(context).size;
-    final themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -72,13 +73,7 @@ class WeatherDetailsScreen extends StatelessWidget {
                   style: const TextStyle(fontSize: 64),
                 ),
                 MinMaxTempWidget(weatherData: weatherData),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('Ощущается как: '),
-                    Text(weatherData.feelsLike.degreefy())
-                  ],
-                ),
+                FeelsLikeTempWidget(temp: weatherData.feelsLike),
                 WindDataWidget(windSpeed: weatherData.windSpeed),
                 SizedBox(
                   height: deviceSize.height * 0.15,

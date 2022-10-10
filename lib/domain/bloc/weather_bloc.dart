@@ -9,6 +9,11 @@ import '../../data/API/weather_api.dart';
 part 'weather_event.dart';
 part 'weather_state.dart';
 
+// Данный блок отвечает как за получение общих деталей погоды,
+// так и за получения массива по прогнозу погоды. По этой причине
+// он имеет два события. Состояние агрегатное - оно хранит как
+// общие детали погоды, так и массив прогноза погоды.
+// Изменение состояния происходит через методы copyWith и clearData
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final _api = WeatherApi();
   String _query = '';

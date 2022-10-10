@@ -7,7 +7,10 @@ import '../../domain/bloc/weather_bloc.dart';
 import '../../utils/extensions.dart';
 
 import '../widgets/search_error_widget.dart';
+import '../widgets/loading_widget.dart';
 
+// Экран прогноза погоды по указанному городу.
+// Список отсортирован по возрастанию температуры
 class ForecastScreen extends StatelessWidget {
   const ForecastScreen({Key? key}) : super(key: key);
 
@@ -21,9 +24,7 @@ class ForecastScreen extends StatelessWidget {
             title: Text(cityName),
           ),
           body: state.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? const LoadingWidget()
               : state.errorCode.isNotEmpty
                   ? Center(child: SearchError(errorCode: state.errorCode))
                   : ListView.separated(

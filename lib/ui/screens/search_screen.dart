@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/bloc/theme_bloc.dart';
 import '../../domain/bloc/weather_bloc.dart';
 
 import '../navigation/main_navigation.dart';
 
 import '../widgets/search_error_widget.dart';
 
+// Экран поиска деталей о погоде по указанному городу.
+// Результаты и ошибки обрабатываются через WeatherBloc
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
@@ -16,7 +19,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   String _query = '';
-
   final _searchTextFieldController = TextEditingController();
 
   @override
@@ -28,9 +30,22 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final weatherBloc = BlocProvider.of<WeatherBloc>(context);
+    final themeBloc = BlocProvider.of<ThemeBloc>(context);
     final deviceSize = MediaQuery.of(context).size;
     final themeData = Theme.of(context);
+    bool isDarkTheme = themeBloc.isLightThemeStored;
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.nightlight_rounded),
+            onPressed: () {
+              themeBloc.add(ChangeThemeEvent(isDarkTheme));
+              setState((() => isDarkTheme = !isDarkTheme));
+            },
+          )
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
